@@ -3,18 +3,35 @@ package com.example.demo.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Data
+@Table(name = "reservation")
 public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    UUID id;
+    @Column(name = "reservation_id")
+    Long id;
 
     @ManyToMany
-    @JoinColumn(name = "reservation_id")
+    @JoinTable(
+            joinColumns = {@JoinColumn(name = "reservation_id", referencedColumnName = "reservation_id")},
+            inverseJoinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")}
+    )
     Set<Room> roomSet;
+
+    @OneToOne
+    @JoinColumn(name = "bill_id")
+    Bill bill;
+
+    @Column(name = "from_date")
+    LocalDate fromDate;
+
+    @Column(name = "to_date")
+    LocalDate toDate;
+
 }

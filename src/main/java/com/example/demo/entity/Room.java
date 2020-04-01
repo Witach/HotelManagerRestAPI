@@ -4,35 +4,42 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Data
+@Table(name = "room")
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    UUID id;
+    @Column(name = "room_id")
+    Long id;
 
+    @Column(name = "room_number")
     String roomNumber;
 
+    @Column(name = "area")
     Integer area;
 
-    Integer amountOfPersons;
+    @Column(name = "person_amount")
+    Integer personAmount;
 
-    Integer review;
-
-    Boolean isEmpty;
-
+    Integer description;
 
     @ManyToMany(mappedBy = "roomSet")
     Set<Reservation> reservationSet;
 
     @ManyToMany
-    @JoinColumn(name = "room_type")
+    @JoinTable(
+            joinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")},
+            inverseJoinColumns = {@JoinColumn(name = "room_type_id", referencedColumnName = "room_type_id")}
+    )
     Set<RoomType> roomTypeSet;
 
     @ManyToMany
-    @JoinColumn(name = "tag_name")
+    @JoinTable(
+            joinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")}
+    )
     Set<Tag> tagSet;
 }

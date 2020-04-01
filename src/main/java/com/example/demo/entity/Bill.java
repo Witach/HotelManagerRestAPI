@@ -3,25 +3,29 @@ package com.example.demo.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.UUID;
+import java.util.Set;
 
 @Entity
 @Data
+@Table(name = "bill")
 public class Bill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    UUID id;
+    @Column(name = "bill_id")
+    Long id;
 
     Double price;
 
-    @OneToOne
+    @OneToOne(mappedBy = "bill")
+    @JoinColumn(name = "reservation_id")
     Reservation reservation;
 
-    @ManyToOne
-    Person tenant;
+    @OneToMany(mappedBy = "bill")
+    Set<Person> tenant;
 
     @ManyToOne
+    @JoinColumn( name = "administrator_id")
     User administrator;
 
 }
