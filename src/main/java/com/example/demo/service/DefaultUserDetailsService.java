@@ -27,9 +27,9 @@ public class DefaultUserDetailsService implements UserDetailsService {
                         () -> new UsernameNotFoundException(s)
                 );
 
-        String[] roles = (String[]) user.getRole().stream()
+        String[] roles = user.getRole().stream()
                 .map(UserRole::getName)
-                .toArray();
+                .toArray(String[]::new);
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
