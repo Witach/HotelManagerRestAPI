@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -29,9 +30,9 @@ public class Reservation {
     Bill bill;
 
     @Column(name = "from_date")
-    LocalDate fromDate;
+    LocalDateTime fromDate;
 
     @Column(name = "to_date")
-    LocalDate toDate;
+    LocalDateTime toDate;
 
 }

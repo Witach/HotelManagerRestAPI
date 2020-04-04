@@ -37,9 +37,20 @@ public class User {
     @Column(name = "user_role")
     Set<UserRole> role;
 
+    @OneToOne
+    Person person;
+
     public User() {
         administratedBill = new HashSet<>();
         role = new HashSet<>();
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public Long getId() {

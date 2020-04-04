@@ -24,7 +24,10 @@ public class Room {
     @Column(name = "person_amount")
     Integer personAmount;
 
-    Integer description;
+    String description;
+
+    @Column(name = "room_price")
+    Double price;
 
     @ManyToMany(mappedBy = "roomSet")
     Set<Reservation> reservationSet;

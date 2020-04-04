@@ -37,11 +37,4 @@ public class AuthController {
                 .status(CREATED)
                 .build();
     }
-
-    @GetMapping("/register")
-    public ResponseEntity<String> registerxd() {
-       return ResponseEntity.ok("<h1>DUPAAAAAAA</h1>");
-
-    }
-
 }

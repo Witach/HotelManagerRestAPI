@@ -4,6 +4,7 @@ package com.example.demo.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -25,8 +26,13 @@ public class Person {
     @JoinColumn(name = "reservation_id")
     Reservation reservation;
 
-    @ManyToOne
-    @JoinColumn(name = "bill_id")
-    Bill bill;
+    @OneToMany(mappedBy = "tenant")
+    Set<Bill> bill;
+
+    @OneToOne
+    User user;
+
+    @OneToMany(mappedBy = "person")
+    Set<Contact> contactSet;
 
 }
