@@ -1,14 +1,18 @@
 package com.example.demo.entity;
 
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Data
 @Table(name = "person")
+@Getter
+@Setter
 public class Person {
 
     @Id
@@ -34,5 +38,29 @@ public class Person {
 
     @OneToMany(mappedBy = "person")
     Set<Contact> contactSet;
+
+    public  Person(Long id){
+        this.id = id;
+    }
+
+    public Person(){
+        this.contactSet = new HashSet<>();
+        this.bill = new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Objects.equals(id, person.id) &&
+                Objects.equals(firstName, person.firstName) &&
+                Objects.equals(lastName, person.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName);
+    }
 
 }

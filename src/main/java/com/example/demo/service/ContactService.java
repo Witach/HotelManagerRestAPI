@@ -23,13 +23,13 @@ public class ContactService {
     }
 
 
-    public void addContact(ContactModel contactModel){
+    public Contact addContact(ContactModel contactModel){
         Contact contact = new Contact();
         if(contactModel.personId != null){
             Person person = personRepository.findById(contactModel.getPersonId()).orElseThrow();
             contact.setPerson(person);
         }
         contact.setPhoneNumber(contactModel.getPhoneNumber());
-        contactRepository.save(contact);
+        return contactRepository.save(contact);
     }
 }

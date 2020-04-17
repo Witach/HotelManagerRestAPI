@@ -1,11 +1,15 @@
 package com.example.demo.entity;
 
-import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@ToString
 public class Bill {
 
     @Id
@@ -24,60 +28,46 @@ public class Bill {
     Person tenant;
 
     @ManyToOne
-    @JoinColumn( name = "administrator_id")
+    @JoinColumn(name = "administrator_id")
     User administrator;
 
     public Bill() {
     }
 
-    public Long getId() {
-        return id;
+
+    public static Builder builder(){
+        return new Builder();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+
+    public static class Builder {
+
+        private Bill bill = new Bill();
+
+        public Builder price(Double price) {
+            bill.setPrice(price);
+            return this;
+        }
+
+        public Builder reservation(Reservation reservation) {
+            bill.setReservation(reservation);
+            return this;
+        }
+
+        public Builder tenant(Person tenant) {
+            bill.setTenant(tenant);
+            return this;
+        }
+
+        public Builder administrator(User administrator) {
+            bill.setAdministrator(administrator);
+            return this;
+        }
+
+        public Bill build() {
+            return bill;
+        }
+
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Reservation getReservation() {
-        return reservation;
-    }
-
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
-
-    public Person getTenant() {
-        return tenant;
-    }
-
-    public void setTenant(Person tenant) {
-        this.tenant = tenant;
-    }
-
-    public User getAdministrator() {
-        return administrator;
-    }
-
-    public void setAdministrator(User administrator) {
-        this.administrator = administrator;
-    }
-
-    @Override
-    public String toString() {
-        return "Bill{" +
-                "id=" + id +
-                ", price=" + price +
-                ", reservation=" + reservation +
-                ", tenant=" + tenant +
-                ", administrator=" + administrator +
-                '}';
-    }
 }
