@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Reservation;
 import com.example.demo.entity.Room;
 import com.example.demo.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,4 +36,6 @@ public class RoomController {
         Page<Room> roomPage = roomService.getPageOfRoomWithSearching(pageable, specification);
         return ResponseEntity.ok(roomPage);
     }
+
+
 }

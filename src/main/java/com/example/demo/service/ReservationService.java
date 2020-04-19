@@ -21,10 +21,10 @@ public class ReservationService {
         this.billService = billService;
     }
 
-    public void addReservation(Reservation reservation){
+    public Reservation addReservation(Reservation reservation){
          String userName = securityContext.getAuthentication().getName();
          Bill bill = billService.createBillFromReservation(reservation, userName);
          reservation.setBill(bill);
-         reservationRepository.save(reservation);
+         return reservationRepository.save(reservation);
     }
 }

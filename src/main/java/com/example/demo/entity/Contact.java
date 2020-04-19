@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 
 import lombok.Data;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import javax.persistence.*;
 
