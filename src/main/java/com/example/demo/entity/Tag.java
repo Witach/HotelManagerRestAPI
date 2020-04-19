@@ -1,12 +1,19 @@
 package com.example.demo.entity;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Table(name = "tag")
 public class Tag {
     @Id
@@ -17,6 +24,7 @@ public class Tag {
     @Column(unique = true)
     String name;
 
+    @JsonManagedReference
     @ManyToMany(mappedBy = "tagSet")
     Set<Room> roomSet;
 }

@@ -34,7 +34,7 @@ public class RoomService {
     }
 
     public Page<Room> getPageOfRoomWithSearching(Pageable pageable, Specification<Room> roomSpecification) {
-        return roomRepository.findAll(roomSpecification, pageable);
+        return roomRepository.findAll(pageable);
     }
 
     public Specification<Room> getSpecififcationFromParams(Map<String, List<String>> params) {

@@ -1,12 +1,22 @@
 package com.example.demo.entity;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Table(name = "room")
 public class Room {
 
@@ -33,6 +43,8 @@ public class Room {
     Set<Reservation> reservationSet;
 
     @ManyToMany
+    @BatchSize(size = 10)
+    @JsonBackReference
     @JoinTable(
             joinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")},
             inverseJoinColumns = {@JoinColumn(name = "room_type_id", referencedColumnName = "room_type_id")}
@@ -40,6 +52,8 @@ public class Room {
     Set<RoomType> roomTypeSet;
 
     @ManyToMany
+    @BatchSize(size = 10)
+    @JsonBackReference
     @JoinTable(
             joinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")}

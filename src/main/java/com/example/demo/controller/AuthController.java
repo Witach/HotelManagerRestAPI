@@ -4,6 +4,7 @@ import com.example.demo.entity.User;
 import com.example.demo.exceptions.UserAlreadyExistsException;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
 
-
+@Slf4j
 @Controller
 public class AuthController {
 
@@ -25,6 +26,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserModel user) {
+        log.info("Received request POST [/register]");
         try {
             userService.addNewUser(user);
         } catch (UserAlreadyExistsException exception) {

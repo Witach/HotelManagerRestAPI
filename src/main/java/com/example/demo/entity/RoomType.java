@@ -1,12 +1,21 @@
 package com.example.demo.entity;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Table(name = "room_type")
 public class RoomType {
 
@@ -18,6 +27,8 @@ public class RoomType {
     @Column(unique = true)
     String name;
 
+
+    @JsonManagedReference
     @ManyToMany(mappedBy = "roomTypeSet")
     Set<Room> roomSet;
 }
