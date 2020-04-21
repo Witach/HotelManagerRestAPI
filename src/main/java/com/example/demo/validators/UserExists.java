@@ -8,8 +8,8 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = PhoneNumberValidator.class )
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PhoneNumber {
-    String message() default "Invalid phone number";
+public @interface UserExists {
+    String message() default "User doesn't exists";
     Class<?>[] groups() default {};
     Class<? extends Payload> [] payload() default {};
 }

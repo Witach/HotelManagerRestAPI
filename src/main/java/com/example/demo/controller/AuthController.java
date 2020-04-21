@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.User;
 import com.example.demo.exceptions.UserAlreadyExistsException;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
@@ -9,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -27,7 +29,7 @@ public class AuthController {
 
     @Transactional
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserModel user) {
+    public ResponseEntity<String> register(@RequestBody @Valid UserModel user) {
         log.info("Received request POST [/register]");
         try {
             userService.addNewUser(user);

@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import static com.example.demo.config.Messages.*;
 
@@ -27,7 +30,7 @@ public class PersonDataController {
 
     @Transactional
     @PostMapping("/contact")
-    public ResponseEntity<?> createContact(@RequestBody ContactModel contact){
+    public ResponseEntity<?> createContact(@RequestBody @Valid ContactModel contact){
         log.info(makeMessageForController("POST [/contact]"));
         Contact newContact = contactService.addContact(contact);
         Link link = new Link("/contact/"+ newContact.getId());
