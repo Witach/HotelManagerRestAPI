@@ -1,20 +1,21 @@
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Table(name = "room_type")
 public class RoomType {
@@ -25,10 +26,15 @@ public class RoomType {
     Long id;
 
     @Column(unique = true)
+    @NotBlank
+    @Size(min = 3, max = 20)
     String name;
 
 
     @JsonManagedReference
     @ManyToMany(mappedBy = "roomTypeSet")
     Set<Room> roomSet;
+
+
+
 }

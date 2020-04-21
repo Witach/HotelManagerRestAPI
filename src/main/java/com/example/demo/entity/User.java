@@ -10,6 +10,10 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,9 +29,13 @@ public class User {
     Long id;
 
     @Column(unique = true)
+    @Email
+    @NotBlank
     String email;
 
     @JsonIgnore
+    @NotBlank
+    @Size(min = 8, max = 24)
     String password;
 
     @JsonIgnore
@@ -41,6 +49,7 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "user_role_id", referencedColumnName = "user_role_id")}
     )
     @Column(name = "user_role")
+    @NotBlank
     Set<UserRole> role;
 
     @OneToOne

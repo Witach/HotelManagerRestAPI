@@ -4,25 +4,32 @@ import com.example.demo.entity.*;
 import com.example.demo.model.ContactModel;
 import com.example.demo.model.PersonModel;
 import com.example.demo.repository.*;
-import com.example.demo.service.BillService;
-import com.example.demo.service.ContactService;
-import com.example.demo.service.DefaultUserDetailsService;
-import com.example.demo.service.PersonService;
+import com.example.demo.service.*;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static com.example.demo.specification.SpecParams.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
@@ -34,13 +41,14 @@ class DemoApplicationTests {
     Person person;
     User user;
     Contact contact;
-    Bill bill;
+    Gson gson;
 
     BillRepository billRepository;
     UserRepository userRepository;
     ReservationRepository reservationRepository;
     ContactRepository contactRepository;
     PersonRepository personRepository;
+    RoomRepository roomRepository;
 
     BillService billServiceMock;
     SecurityContext securityContextMock;
@@ -49,8 +57,8 @@ class DemoApplicationTests {
     void initializeBeans() {
         Reservation reservation = new Reservation();
         reservation.setId(1L);
-        reservation.setFromDate(LocalDateTime.now());
-        reservation.setToDate(LocalDateTime.now().minusWeeks(1L));
+        reservation.setFromDate(LocalDate.now());
+        reservation.setToDate(LocalDate.now().minusWeeks(1L));
         Person person = new Person();
         person.setLastName("Witszek");
         person.setFirstName("Dawid");
@@ -90,6 +98,8 @@ class DemoApplicationTests {
         contactRepository = mock(ContactRepository.class);
         securityContextMock = mock(SecurityContext.class);
         billServiceMock = mock(BillService.class);
+        roomRepository = mock(RoomRepository.class);
+        gson = new Gson();
     }
 
     @Test
@@ -184,5 +194,36 @@ class DemoApplicationTests {
 
 
 
+    @Test
+    void shouldReturnListWithOneRoom(){
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put(
+                FROM_DATE.toString(),
+                List.of("2020-05-03")
+        );
+        multiValueMap.put(
+                TO_DATE.toString(),
+                List.of("2020-05-08")
+        );
+        multiValueMap.put(
+                AREA.toString(),
+                List.of("50")
+        );
+        multiValueMap.put(
+                PERSON_AMOUNT.toString(),
+                List.of("1")
+        );
+        multiValueMap.put(
+                TAGS.toString(),
+                List.of("Widok na morze","Widok na góry")
+        );
+        multiValueMap.put(
+                TYPES.toString(),
+                List.of("Zwykły")
+        );
+        RoomService roomService = new RoomService(roomRepository);
+        Specification<Room> roomSpecification = roomService.getSpecififcationFromParams(multiValueMap);
+        assertTrue(true);
+    }
 
 }

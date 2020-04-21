@@ -13,10 +13,18 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.example.demo.specification.SpecParams.*;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,5 +60,33 @@ public class IntegrationTest {
                      .andReturn()
                      .getRequest()
                      .getContentAsString();
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldSearchForRooms() throws Exception {
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put(
+                FROM_DATE.toString(),
+                List.of("2020-05-03")
+        );
+        multiValueMap.put(
+          TO_DATE.toString(),
+          List.of("2020-05-08")
+        );
+        multiValueMap.put(
+                AREA.toString(),
+                List.of("50")
+        );
+        multiValueMap.put(
+            PERSON_AMOUNT.toString(),
+                List.of("1")
+        );
+        mockMvc.perform(
+                get("/rooms")
+                .params(multiValueMap)
+        )
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }

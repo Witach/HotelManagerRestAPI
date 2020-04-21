@@ -5,6 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -17,18 +19,22 @@ public class Bill {
     @Column(name = "bill_id")
     Long id;
 
+    @Min(0)
     Double price;
 
     @OneToOne(mappedBy = "bill")
     @JoinColumn(name = "reservation_id")
+    @NotBlank
     Reservation reservation;
 
     @ManyToOne
     @JoinColumn(name = "tenant_id")
+    @NotBlank
     Person tenant;
 
     @ManyToOne
     @JoinColumn(name = "administrator_id")
+    @NotBlank
     User administrator;
 
     public Bill() {

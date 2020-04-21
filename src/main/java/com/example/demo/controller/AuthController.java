@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -24,6 +25,7 @@ public class AuthController {
         this.userService = userService;
     }
 
+    @Transactional
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserModel user) {
         log.info("Received request POST [/register]");

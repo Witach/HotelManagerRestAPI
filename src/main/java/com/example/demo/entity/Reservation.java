@@ -1,16 +1,19 @@
 package com.example.demo.entity;
 
+import com.example.demo.validators.ReservationBetweenDays;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Data
 @Table(name = "reservation")
+@ReservationBetweenDays
 public class Reservation {
 
     @Id
@@ -19,6 +22,7 @@ public class Reservation {
     Long id;
 
     @ManyToMany
+    @NotBlank
     @JoinTable(
             joinColumns = {@JoinColumn(name = "reservation_id", referencedColumnName = "reservation_id")},
             inverseJoinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")}
@@ -30,9 +34,13 @@ public class Reservation {
     Bill bill;
 
     @Column(name = "from_date")
-    LocalDateTime fromDate;
+    @NotBlank
+    @FutureOrPresent
+    LocalDate fromDate;
 
     @Column(name = "to_date")
-    LocalDateTime toDate;
+    @NotBlank
+    @Future
+    LocalDate toDate;
 
 }

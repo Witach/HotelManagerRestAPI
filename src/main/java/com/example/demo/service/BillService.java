@@ -9,8 +9,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.naming.spi.ObjectFactory;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -40,8 +39,8 @@ public class BillService {
         User user = userRepository.findUserByEmail(name).orElseThrow();
         Person person = user.getPerson();
 
-        LocalDateTime fromDate = reservationFromDB.getFromDate();
-        LocalDateTime toDate = reservationFromDB.getToDate();
+        LocalDate fromDate = reservationFromDB.getFromDate();
+        LocalDate toDate = reservationFromDB.getToDate();
         long days = ChronoUnit.DAYS.between(fromDate,toDate);
 
         double price = roomSet.stream()

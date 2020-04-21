@@ -7,12 +7,15 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Table(name = "tag")
 public class Tag {
@@ -22,6 +25,8 @@ public class Tag {
     Long id;
 
     @Column(unique = true)
+    @Size(min = 3, max = 20)
+    @NotBlank
     String name;
 
     @JsonManagedReference

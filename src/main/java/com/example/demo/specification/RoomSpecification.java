@@ -5,32 +5,37 @@ import com.example.demo.entity.Room;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public class RoomSpecification {
 
-    public static Specification<Room> betweenDate(LocalDateTime from, LocalDateTime to) {
+    public static Specification<Room> betweenDate(LocalDate from, LocalDate to) {
         return (Specification<Room>) (root, query, criteriaBuilder) -> {
-            Join<Room, Reservation> roomReservertionJoin = root.join("reservationSet");
-            return criteriaBuilder.and(
-                    criteriaBuilder.greaterThanOrEqualTo(roomReservertionJoin.get("fromDate"), from),
-                    criteriaBuilder.lessThanOrEqualTo(roomReservertionJoin.get("toDate"), to)
-            ).not();
+            Join<Room, Reservation> roomReservertionJoin = root.join("reservationSet", JoinType.LEFT);
+            return criteriaBuilder.or(
+                    criteriaBuilder.greaterThan(roomReservertionJoin.get("fromDate"), to),
+                    criteriaBuilder.lessThan(roomReservertionJoin.get("toDate"), from),
+                    criteriaBuilder.and(
+                          criteriaBuilder.isNull(roomReservertionJoin.get("fromDate")),
+                          criteriaBuilder.isNull(roomReservertionJoin.get("toDate"))
+                    )
+            );
         };
     }
 
     public static Specification<Room> isType(final List<String> roomTypeList) {
         return (Specification<Room>) (root, query, criteriaBuilder) -> {
-            Path<String> roomTypePath = root.get("roomTypeSet").get("name");
+            Path<String> roomTypePath = root.join("roomTypeSet", JoinType.LEFT).get("name");
             return roomTypePath.in(roomTypeList);
         };
     }
 
     public static Specification<Room> hasTag(final List<String> roomTag) {
         return (Specification<Room>) (root, query, criteriaBuilder) -> {
-            Path<String> roomTypePath = root.join("tagSet").get("name");
+            Path<String> roomTypePath = root.join("tagSet", JoinType.LEFT).get("name");
             return roomTypePath.in(roomTag);
         };
     }
