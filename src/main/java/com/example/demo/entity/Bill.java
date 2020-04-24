@@ -6,7 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -24,17 +24,17 @@ public class Bill {
 
     @OneToOne(mappedBy = "bill")
     @JoinColumn(name = "reservation_id")
-    @NotBlank
+    @NotNull
     Reservation reservation;
 
     @ManyToOne
     @JoinColumn(name = "tenant_id")
-    @NotBlank
+    @NotNull
     Person tenant;
 
     @ManyToOne
     @JoinColumn(name = "administrator_id")
-    @NotBlank
+    @NotNull
     User administrator;
 
     public Bill() {

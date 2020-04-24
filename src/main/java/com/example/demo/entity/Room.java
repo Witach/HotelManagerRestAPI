@@ -5,10 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,30 +25,30 @@ public class Room {
     Long id;
 
     @Column(name = "room_number")
-    @NotBlank
+    @NotNull
     @Size(min = 1, max = 5)
     String roomNumber;
 
     @Column(name = "area")
     @Min(20)
     @Max(100)
-    @NotBlank
+    @NotNull
     Integer area;
 
     @Column(name = "person_amount")
     @Min(1)
     @Max(5)
-    @NotBlank
+    @NotNull
     Integer personAmount;
 
-    @NotBlank
+    @NotNull
     @Min(24)
-    @NotBlank
+    @NotNull
     String description;
 
     @Column(name = "room_price")
     @Min(1)
-    @NotBlank
+    @NotNull
     Double price;
 
     @ManyToMany(mappedBy = "roomSet")

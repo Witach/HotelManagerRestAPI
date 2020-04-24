@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Objects;
@@ -23,12 +24,12 @@ public class Person {
     Long id;
 
     @Column(name = "first_name")
-    @NotBlank
+    @NotNull
     @Size(min = 3, max = 32)
     String firstName;
 
     @Column(name = "last_name")
-    @NotBlank
+    @NotNull
     @Size(min = 3, max = 32)
     String lastName;
 
@@ -40,7 +41,7 @@ public class Person {
     Set<Bill> bill;
 
     @OneToOne
-    @NotBlank
+    @NotNull
     User user;
 
     @OneToMany(mappedBy = "person")

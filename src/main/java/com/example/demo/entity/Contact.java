@@ -7,6 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -20,13 +21,13 @@ public class Contact {
     Long id;
 
     @Column(name = "phone_number")
-    @NotBlank
+    @NotNull
     @Size(min = 9, max = 9)
     String phoneNumber;
 
     @ManyToOne
     @JoinColumn(name = "person_id")
-    @NotBlank
+    @NotNull
     Person person;
 
 }

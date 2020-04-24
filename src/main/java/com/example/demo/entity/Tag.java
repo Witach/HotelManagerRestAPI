@@ -8,6 +8,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class Tag {
 
     @Column(unique = true)
     @Size(min = 3, max = 20)
-    @NotBlank
+    @NotNull
     String name;
 
     @JsonManagedReference

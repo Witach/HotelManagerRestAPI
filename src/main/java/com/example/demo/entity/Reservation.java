@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class Reservation {
     Long id;
 
     @ManyToMany
-    @NotBlank
+    @NotNull
     @JoinTable(
             joinColumns = {@JoinColumn(name = "reservation_id", referencedColumnName = "reservation_id")},
             inverseJoinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")}
@@ -34,12 +35,12 @@ public class Reservation {
     Bill bill;
 
     @Column(name = "from_date")
-    @NotBlank
+    @NotNull
     @FutureOrPresent
     LocalDate fromDate;
 
     @Column(name = "to_date")
-    @NotBlank
+    @NotNull
     @Future
     LocalDate toDate;
 
