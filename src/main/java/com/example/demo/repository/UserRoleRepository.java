@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-@RepositoryRestResource(exported = false)
+@RepositoryRestResource
+@SecuredAdmin
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
     Optional<UserRole> findUserRoleByName(String name);

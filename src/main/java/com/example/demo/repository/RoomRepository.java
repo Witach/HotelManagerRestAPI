@@ -7,25 +7,42 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-
 @RepositoryRestResource(path = "rooms")
 public interface RoomRepository extends JpaRepository<Room, Long>, JpaSpecificationExecutor<Room> {
     @Override
-    @RestResource(exported = false)
+    @SecuredAdmin
     List<Room> findAll();
 
     @Override
-    @RestResource(exported = false)
+    @SecuredAdmin
     List<Room> findAll(Sort sort);
 
     @Override
-    @RestResource(exported = false)
+    @SecuredAdmin
     Page<Room> findAll(Pageable pageable);
+
+    @Override
+    @SecuredAdmin
+    Room save(Room room);
+
+    @Override
+    @SecuredAdmin
+    void deleteInBatch(Iterable<Room> entities);
+
+    @Override
+    @SecuredAdmin
+    void deleteById(Long aLong);
+
+    @Override
+    @SecuredAdmin
+    void delete(Room entity);
+
+    @Override
+    @SecuredAdmin
+    void deleteAll(Iterable<? extends Room> entities);
 }

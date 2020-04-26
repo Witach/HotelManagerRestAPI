@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-@Repository
 @RepositoryRestResource(path = "people")
+@SecuredWithBoth
 public interface PersonRepository extends JpaRepository<Person, Long> {
 }

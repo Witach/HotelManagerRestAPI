@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 @RepositoryRestResource(path = "users")
+@SecuredWithBoth
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findUserByEmail(String email);

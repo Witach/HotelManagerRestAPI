@@ -9,4 +9,19 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RepositoryRestResource(path = "tags")
 public interface TagRepository extends JpaRepository<Tag, Long> {
+    @Override
+    @SecuredAdmin
+    <S extends Tag> S save(S entity);
+
+    @Override
+    @SecuredAdmin
+    void deleteById(Long aLong);
+
+    @Override
+    @SecuredAdmin
+    void delete(Tag entity);
+
+    @Override
+    @SecuredAdmin
+    void deleteAll(Iterable<? extends Tag> entities);
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-
-@RepositoryRestResource(exported = false)
+@SecuredAdmin
+@RepositoryRestResource
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 }
