@@ -47,7 +47,7 @@ public class BillService {
                 .reduce(
                         0.,
                         (sum,room)-> sum + room.getPrice() * days,
-                        (sum, sum_b) -> sum + sum_b
+                        Double::sum
                 );
 
         Bill bill = Bill.builder()

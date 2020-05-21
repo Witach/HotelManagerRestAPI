@@ -30,6 +30,7 @@ public class DefaultUserDetailsService implements UserDetailsService {
         String[] roles = user.getRole().stream()
                 .map(UserRole::getName)
                 .toArray(String[]::new);
+
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())

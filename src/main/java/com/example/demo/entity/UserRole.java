@@ -28,6 +28,7 @@ public class UserRole {
 
     String description;
 
+
     @ManyToMany(mappedBy = "role", fetch = FetchType.EAGER)
     Set<User> user;
 

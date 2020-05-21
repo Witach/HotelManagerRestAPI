@@ -1,12 +1,15 @@
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,7 +45,7 @@ public class Room {
     Integer personAmount;
 
     @NotNull
-    @Min(24)
+    @Size(min = 24)
     @NotNull
     String description;
 
@@ -52,11 +55,11 @@ public class Room {
     Double price;
 
     @ManyToMany(mappedBy = "roomSet")
+    @JsonIgnore
     Set<Reservation> reservationSet = new HashSet<>();
 
     @ManyToMany
     @BatchSize(size = 10)
-    @JsonBackReference
     @JoinTable(
             joinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")},
             inverseJoinColumns = {@JoinColumn(name = "room_type_id", referencedColumnName = "room_type_id")}
@@ -65,7 +68,6 @@ public class Room {
 
     @ManyToMany
     @BatchSize(size = 10)
-    @JsonBackReference
     @JoinTable(
             joinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")}

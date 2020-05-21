@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -9,7 +10,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Getter
 @Setter
 @ToString
 public class Bill {
@@ -22,16 +22,19 @@ public class Bill {
     @Min(0)
     Double price;
 
-    @OneToOne(mappedBy = "bill")
+    @JsonBackReference
+    @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "reservation_id")
     @NotNull
     Reservation reservation;
 
-    @ManyToOne
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tenant_id")
     @NotNull
     Person tenant;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "administrator_id")
     @NotNull
@@ -39,7 +42,28 @@ public class Bill {
 
     public Bill() {
     }
+    public Bill(int id) {
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public Person getTenant() {
+        return tenant;
+    }
+
+    public User getAdministrator() {
+        return administrator;
+    }
 
     public static Builder builder(){
         return new Builder();

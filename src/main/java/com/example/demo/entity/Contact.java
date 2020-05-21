@@ -1,12 +1,10 @@
 package com.example.demo.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,6 +26,7 @@ public class Contact {
     @ManyToOne
     @JoinColumn(name = "person_id")
     @NotNull
+    @JsonBackReference
     Person person;
 
 }

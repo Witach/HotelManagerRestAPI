@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -17,7 +18,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Table(name = "room_type")
 public class RoomType {
 
@@ -32,10 +32,12 @@ public class RoomType {
     String name;
 
 
-    @JsonManagedReference
+    @JsonIgnore
     @ManyToMany(mappedBy = "roomTypeSet")
     Set<Room> roomSet;
 
-
-
+    @Override
+    public String toString() {
+        return name;
+    }
 }

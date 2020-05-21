@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import com.example.demo.validators.ReservationBetweenDays;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,8 +32,9 @@ public class Reservation {
     )
     Set<Room> roomSet;
 
-    @OneToOne
+    @OneToOne(mappedBy = "reservation")
     @JoinColumn(name = "bill_id")
+    @JsonIgnore
     Bill bill;
 
     @Column(name = "from_date")

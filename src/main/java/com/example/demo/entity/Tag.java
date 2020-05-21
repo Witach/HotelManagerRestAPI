@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Table(name = "tag")
 public class Tag {
     @Id
@@ -30,7 +30,14 @@ public class Tag {
     @NotNull
     String name;
 
-    @JsonManagedReference
     @ManyToMany(mappedBy = "tagSet")
+    @JsonIgnore
     Set<Room> roomSet;
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+
 }

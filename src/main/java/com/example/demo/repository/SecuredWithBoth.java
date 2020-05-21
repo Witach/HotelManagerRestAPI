@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
-@Secured({"ROLE_USER","ROLE_ADMIN"})
+//@Secured({"ROLE_USER","ROLE_ADMIN"})
 @Target({METHOD, TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SecuredWithBoth {

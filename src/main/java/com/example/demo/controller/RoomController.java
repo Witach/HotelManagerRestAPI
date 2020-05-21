@@ -2,19 +2,20 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Room;
 import com.example.demo.exceptions.ApiError;
+import com.example.demo.repository.RoomRepository;
 import com.example.demo.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeParseException;
 
@@ -22,22 +23,44 @@ import static com.example.demo.config.Messages.makeMessageForController;
 
 @Slf4j
 @RestController
+@CrossOrigin
+@RequestMapping("/rooms")
 public class RoomController {
 
-
     private RoomService roomService;
+    private RoomRepository roomRepository;
+    private PagedResourcesAssembler<Room> pagedResourcesAssembler;
+
 
     @Autowired
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, RoomRepository roomRepository, PagedResourcesAssembler<Room> pagedResourcesAssembler) {
         this.roomService = roomService;
+        this.roomRepository = roomRepository;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
-    @GetMapping("/rooms")
-    public ResponseEntity<Page<Room>> getListOfRooms(Pageable pageable, @RequestParam MultiValueMap<String, String> params) {
+    @GetMapping
+    public ResponseEntity<PagedModel<EntityModel<Room>>> getListOfRooms(Pageable pageable, @RequestParam MultiValueMap<String, String> params) {
         log.info(makeMessageForController("GET [/rooms]"));
         Specification<Room> specification = roomService.getSpecififcationFromParams(params);
         Page<Room> roomPage = roomService.getPageOfRoomWithSearching(pageable, specification);
-        return ResponseEntity.ok(roomPage);
+        PagedModel<EntityModel<Room>> pagedModel = pagedResourcesAssembler.toModel(roomPage);
+        return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Room> getRoom(@PathVariable long id){
+        var room = roomRepository.findById(id)
+                .orElseThrow(
+                        IllegalArgumentException::new
+                );
+        return ResponseEntity.ok(room);
+    }
+
+    @PostMapping
+    public ResponseEntity<Room> postRoom(@RequestBody Room room){
+        var newRoom = roomRepository.save(room);
+        return ResponseEntity.ok(newRoom);
     }
 
     @ExceptionHandler({DateTimeParseException.class})

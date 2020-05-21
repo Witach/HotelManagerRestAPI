@@ -3,11 +3,10 @@ package com.example.demo.entity;
 
 import com.example.demo.model.UserModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -48,6 +47,7 @@ public class User {
     @NotNull
     Set<UserRole> role;
 
+    @JsonManagedReference
     @OneToOne
     Person person;
 

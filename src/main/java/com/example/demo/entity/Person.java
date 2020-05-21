@@ -1,6 +1,9 @@
 package com.example.demo.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,17 +36,16 @@ public class Person {
     @Size(min = 3, max = 32)
     String lastName;
 
-    @ManyToOne
-    @JoinColumn(name = "reservation_id")
-    Reservation reservation;
-
+    @JsonBackReference
     @OneToMany(mappedBy = "tenant")
     Set<Bill> bill;
 
-    @OneToOne
+    @JsonBackReference
+    @OneToOne(mappedBy = "person")
     @NotNull
     User user;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "person")
     Set<Contact> contactSet;
 
