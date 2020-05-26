@@ -3,7 +3,10 @@ package com.example.demo.entity;
 import com.example.demo.validators.ReservationBetweenDays;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
@@ -17,6 +20,9 @@ import java.util.Set;
 @Data
 @Table(name = "reservation")
 @ReservationBetweenDays
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Reservation {
 
     @Id

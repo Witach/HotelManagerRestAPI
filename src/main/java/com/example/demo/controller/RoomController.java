@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Room;
 import com.example.demo.exceptions.ApiError;
+import com.example.demo.model.ReservationDTO;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.demo.config.Messages.makeMessageForController;
 
@@ -46,6 +49,16 @@ public class RoomController {
         Page<Room> roomPage = roomService.getPageOfRoomWithSearching(pageable, specification);
         PagedModel<EntityModel<Room>> pagedModel = pagedResourcesAssembler.toModel(roomPage);
         return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping(path = "/{id}/reservations")
+    public ResponseEntity<List<ReservationDTO>> getRoomReservation(@PathVariable Long id){
+        var room = roomRepository.findById(id)
+                .orElseThrow(() -> {throw new IllegalArgumentException("There is no room with this Id");});
+        var reservations = room.getReservationSet().stream()
+                .map(ReservationDTO::makeFromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(reservations);
     }
 
     @GetMapping("/{id}")
