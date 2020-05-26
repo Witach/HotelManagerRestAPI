@@ -4,10 +4,13 @@ import com.example.demo.exceptions.UserAlreadyExistsException;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -43,4 +46,11 @@ public class AuthController {
                 .status(CREATED)
                 .build();
     }
+
+    @CrossOrigin
+    @PostMapping("/auth")
+    public ResponseEntity<User> authenticate(){
+     return ResponseEntity.ok(null);
+    }
+
 }

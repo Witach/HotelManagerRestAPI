@@ -3,6 +3,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/hotel
     username: postgres
     password: retsad123
+    initialization-mode: always
   jpa:
     show-sql: true
     hibernate:
