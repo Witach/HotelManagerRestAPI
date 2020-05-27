@@ -38,7 +38,7 @@ public class Bill {
     @ManyToOne
     @JoinColumn(name = "administrator_id")
     @NotNull
-    User administrator;
+    AppUser administrator;
 
     public Bill() {
     }
@@ -61,7 +61,7 @@ public class Bill {
         return tenant;
     }
 
-    public User getAdministrator() {
+    public AppUser getAdministrator() {
         return administrator;
     }
 
@@ -89,7 +89,7 @@ public class Bill {
             return this;
         }
 
-        public Builder administrator(User administrator) {
+        public Builder administrator(AppUser administrator) {
             bill.setAdministrator(administrator);
             return this;
         }

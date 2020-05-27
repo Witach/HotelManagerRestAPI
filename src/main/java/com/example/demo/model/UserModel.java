@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.example.demo.entity.Contact;
+import com.example.demo.entity.Person;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -15,4 +17,14 @@ public class UserModel {
     @NotNull
     @Size(min = 5, max = 24)
     String password;
+    @NotNull
+    @Size(min = 9, max = 9)
+    String contact;
+    @NotNull
+    String firstName;
+    @NotNull
+    String lastName;
+    @NotNull
+    @Size(min = 11, max = 11)
+    String pesel;
 }

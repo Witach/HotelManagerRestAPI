@@ -1,14 +1,13 @@
 package com.example.demo.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -19,6 +18,8 @@ import java.util.Set;
 @Table(name = "person")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class Person {
 
     @Id
@@ -43,14 +44,19 @@ public class Person {
     @JsonBackReference
     @OneToOne(mappedBy = "person")
     @NotNull
-    User user;
+    AppUser appUser;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person",cascade = CascadeType.PERSIST)
     Set<Contact> contactSet;
 
     public  Person(Long id){
         this.id = id;
+    }
+
+    public Person(@NotNull @Size(min = 3, max = 32) String firstName, @NotNull @Size(min = 3, max = 32) String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public Person(){

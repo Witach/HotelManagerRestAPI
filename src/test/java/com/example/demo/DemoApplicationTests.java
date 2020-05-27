@@ -34,7 +34,7 @@ class DemoApplicationTests {
 
     Reservation reservation;
     Person person;
-    User user;
+    AppUser appUser;
     Contact contact;
     Gson gson;
 
@@ -58,16 +58,16 @@ class DemoApplicationTests {
         person.setLastName("Witszek");
         person.setFirstName("Dawid");
         person.setId(1L);
-        User user = new User();
-        user.setEmail("admin");
-        user.setPassword("{noop}admin");
+        AppUser appUser = new AppUser();
+        appUser.setEmail("admin");
+        appUser.setPassword("{noop}admin");
         UserRole userRole = new UserRole();
         userRole.setId(0L);
         userRole.setName("USER");
-        user.getRole().add(userRole);
-        user.setId(1L);
-        user.setPerson(person);
-        person.setUser(user);
+        appUser.getRole().add(userRole);
+        appUser.setId(1L);
+        appUser.setPerson(person);
+        person.setAppUser(appUser);
         Room room_a = new Room();
         room_a.setPrice(50.);
         room_a.setId(1L);
@@ -80,11 +80,11 @@ class DemoApplicationTests {
         contact.setPhoneNumber("792343278");
         person.getContactSet().add(contact);
         Bill bill = new Bill();
-        bill.setAdministrator(user);
+        bill.setAdministrator(appUser);
         bill.setTenant(person);
         this.reservation = reservation;
         this.person = person;
-        this.user = user;
+        this.appUser = appUser;
         this.contact = contact;
         billRepository = mock(BillRepository.class);
         reservationRepository = mock(ReservationRepository.class);
@@ -100,7 +100,7 @@ class DemoApplicationTests {
     @Test
     void shouldCreateBillFromReservationInfo() {
         when(reservationRepository.findById(anyLong())).thenReturn(Optional.of(reservation));
-        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(appUser));
         when(billRepository.save(any(Bill.class))).thenReturn(null);
 
         BillService billService = new BillService(billRepository, reservationRepository, userRepository);
@@ -132,7 +132,7 @@ class DemoApplicationTests {
 
     @Test
     void shouldReturnUserInfoWithDefaultRole(){
-        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(appUser));
 
         UserDetailsService userDetailsService = new DefaultUserDetailsService(userRepository);
         UserDetails userDetails = userDetailsService.loadUserByUsername("admin");
@@ -140,8 +140,8 @@ class DemoApplicationTests {
                 UserDetails::getPassword,
                 UserDetails::getUsername
         ).contains(
-                user.getPassword(),
-                user.getEmail()
+                appUser.getPassword(),
+                appUser.getEmail()
         );
 
         List<String> list = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
@@ -162,7 +162,7 @@ class DemoApplicationTests {
     @Test
     void shouldAddPerson(){
         AtomicReference<Person> personAtomicReference = new AtomicReference<>();
-        when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(userRepository.findUserByEmail(appUser.getEmail())).thenReturn(Optional.of(appUser));
         when(personRepository.save(any())).thenAnswer(
                 inv -> {
                     Person person = inv.getArgument(0);
@@ -182,9 +182,9 @@ class DemoApplicationTests {
         assertThat(addedPerson).isNotNull().extracting("firstName","lastName")
                 .contains("Dawid", "Witaszek");
 
-        User userFromAddedPerson = person.getUser();
+        AppUser appUserFromAddedPerson = person.getAppUser();
 
-        assertThat(userFromAddedPerson).isEqualTo(user);
+        assertThat(appUserFromAddedPerson).isEqualTo(appUser);
     }
 
 

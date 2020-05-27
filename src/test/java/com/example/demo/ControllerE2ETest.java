@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.entity.User;
+import com.example.demo.entity.AppUser;
 import com.example.demo.model.UserModel;
 import com.example.demo.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,7 @@ public class ControllerE2ETest {
     private int port;
 
     TestRestTemplate testRestTemplate;
-    User fakeUser = new User();
+    AppUser fakeAppUser = new AppUser();
 
     UserRepository userRepository;
 
@@ -34,14 +34,14 @@ public class ControllerE2ETest {
 
     @BeforeEach
     void init() {
-        Optional<User> user = userRepository.findUserByEmail("witaszek99@wp.pl");
+        Optional<AppUser> user = userRepository.findUserByEmail("witaszek99@wp.pl");
         user.ifPresent(value -> userRepository.delete(value));
-        fakeUser.setPassword("retsad123");
+        fakeAppUser.setPassword("retsad123");
     }
 
     @AfterEach
     void tearDown() {
-        Optional<User> user = userRepository.findUserByEmail("witaszek99@wp.pl");
+        Optional<AppUser> user = userRepository.findUserByEmail("witaszek99@wp.pl");
         user.ifPresent(value -> userRepository.delete(value));
     }
 
@@ -60,10 +60,10 @@ public class ControllerE2ETest {
         userModel.setEmail("witaszek99@wp.pl");
         userModel.setPassword("retsad123");
         testRestTemplate.postForObject("http://localhost:" + port + "/register", userModel, String.class);
-        Optional<User> optionalUser = userRepository.findUserByEmail("witaszek99@wp.pl");
+        Optional<AppUser> optionalUser = userRepository.findUserByEmail("witaszek99@wp.pl");
         assertTrue(optionalUser.isPresent());
-        User user = optionalUser.orElse(fakeUser);
-        assertNotEquals("retsad123", user.getPassword());
+        AppUser appUser = optionalUser.orElse(fakeAppUser);
+        assertNotEquals("retsad123", appUser.getPassword());
     }
 
     @Test

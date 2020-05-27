@@ -2,23 +2,22 @@ package com.example.demo.entity;
 
 
 import com.example.demo.model.UserModel;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
-
+//Zmieniłem bo intelij pluł się o nazwe
 @Entity
 @Table(name = "app_user")
 @Getter
 @Setter
 @ToString
-public class User {
+@Builder
+@AllArgsConstructor
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -45,13 +44,13 @@ public class User {
     )
     @Column(name = "user_role")
     @NotNull
-    Set<UserRole> role;
+    Set<UserRole> role = new HashSet<>();
 
     @JsonManagedReference
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     Person person;
 
-    public User() {
+    public AppUser() {
         administratedBill = new HashSet<>();
         role = new HashSet<>();
     }
@@ -62,13 +61,6 @@ public class User {
 
     public void setPerson(Person person) {
         this.person = person;
-    }
-
-    public static User createUserFromUserModel(UserModel userModel){
-        User user = new User();
-        user.setPassword(userModel.getPassword());
-        user.setEmail(userModel.getEmail());
-        return user;
     }
 
 }

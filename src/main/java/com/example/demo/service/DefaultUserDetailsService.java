@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.User;
+import com.example.demo.entity.AppUser;
 import com.example.demo.entity.UserRole;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +22,18 @@ public class DefaultUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
-        User user = userRepository.findUserByEmail(s)
+        AppUser appUser = userRepository.findUserByEmail(s)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(s)
                 );
 
-        String[] roles = user.getRole().stream()
+        String[] roles = appUser.getRole().stream()
                 .map(UserRole::getName)
                 .toArray(String[]::new);
 
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
+                .username(appUser.getEmail())
+                .password(appUser.getPassword())
                 .roles(roles)
                 .build();
     }

@@ -36,8 +36,8 @@ public class BillService {
         Reservation reservationFromDB = reservationOptional.orElseThrow();
         Set<Room> roomSet = reservation.getRoomSet();
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        User user = userRepository.findUserByEmail(name).orElseThrow();
-        Person person = user.getPerson();
+        AppUser appUser = userRepository.findUserByEmail(name).orElseThrow();
+        Person person = appUser.getPerson();
 
         LocalDate fromDate = reservationFromDB.getFromDate();
         LocalDate toDate = reservationFromDB.getToDate();

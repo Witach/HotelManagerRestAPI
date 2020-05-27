@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -30,7 +28,7 @@ public class UserRole {
 
 
     @ManyToMany(mappedBy = "role", fetch = FetchType.EAGER)
-    Set<User> user;
+    Set<AppUser> appUser;
 
     public UserRole() {
     }

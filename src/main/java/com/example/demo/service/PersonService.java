@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.AppUser;
 import com.example.demo.entity.Contact;
 import com.example.demo.entity.Person;
-import com.example.demo.entity.User;
 import com.example.demo.model.PersonModel;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.UserRepository;
@@ -37,8 +37,8 @@ public class PersonService {
     public Person addPerson(PersonModel personModel){
         Person person = new Person();
         if(personModel.getUserEmail() != null){
-            User user = userRepository.findUserByEmail(personModel.getUserEmail()).orElseThrow();
-            person.setUser(user);
+            AppUser appUser = userRepository.findUserByEmail(personModel.getUserEmail()).orElseThrow();
+            person.setAppUser(appUser);
         }
         person.setFirstName(personModel.getFirstName());
         person.setLastName(personModel.getLastName());

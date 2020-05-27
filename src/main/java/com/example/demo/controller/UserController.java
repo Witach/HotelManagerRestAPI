@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.AppUser;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.entity.User;
 
 @RestController
 @RequestMapping("/user")
@@ -14,7 +14,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable long id){
+    public ResponseEntity<AppUser> getUser(@PathVariable long id){
         return ResponseEntity.ok(
                 userRepository.findById(id).orElseThrow(
                         IllegalArgumentException::new
@@ -23,18 +23,18 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> postUser(@RequestBody User user){
+    public ResponseEntity<AppUser> postUser(@RequestBody AppUser appUser){
         return ResponseEntity.ok(
-                userRepository.save(user)
+                userRepository.save(appUser)
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> putUser(@RequestBody User user, @PathVariable long id){
+    public ResponseEntity<AppUser> putUser(@RequestBody AppUser appUser, @PathVariable long id){
         if(!userRepository.existsById(id))
             throw new IllegalArgumentException("User doesn't exists");
 
-        var newUser = userRepository.save(user);
+        var newUser = userRepository.save(appUser);
         return ResponseEntity.ok(newUser);
     }
 }

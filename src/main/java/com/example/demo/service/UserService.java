@@ -1,15 +1,18 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.AppUser;
+import com.example.demo.entity.Contact;
+import com.example.demo.entity.Person;
 import com.example.demo.entity.UserRole;
 import com.example.demo.exceptions.UserAlreadyExistsException;
 import com.example.demo.model.UserModel;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.entity.User;
 import com.example.demo.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,28 +30,44 @@ public class UserService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    public void addNewUser(UserModel userModel) throws UserAlreadyExistsException {
-        Optional<User> userOptional = this.userRepository.findUserByEmail(userModel.getEmail());
+    public AppUser addNewUser(UserModel userModel) throws UserAlreadyExistsException {
+        Optional<AppUser> userOptional = this.userRepository.findUserByEmail(userModel.getEmail());
         if(userOptional.isPresent())
             throw new UserAlreadyExistsException(userModel.getEmail());
 
-        User user = User.createUserFromUserModel(userModel);
+        Contact contact = new Contact(userModel.getContact());
 
-        encodeUserPassword(user);
+        Person person = Person.builder()
+                .contactSet(Set.of(contact))
+                .firstName(userModel.getFirstName())
+                .lastName(userModel.getLastName())
+                .build();
 
-        addDefaultRoleToUser(user.getRole());
+        AppUser appUser = AppUser.builder()
+                .email(userModel.getEmail())
+                .password(userModel.getPassword())
+                .person(person)
+                .role(new HashSet<>())
+                .build();
 
-        this.userRepository.save(user);
+        contact.setPerson(person);
+        person.setAppUser(appUser);
+
+        encodeUserPassword(appUser);
+
+        addDefaultRoleToUser(appUser.getRole());
+
+        return this.userRepository.save(appUser);
     }
 
-    private void encodeUserPassword(User user){
-        String password = user.getPassword();
+    private void encodeUserPassword(AppUser appUser){
+        String password = appUser.getPassword();
         String passwordEncoded = passwordEncoder.encode(password);
-        user.setPassword(passwordEncoded);
+        appUser.setPassword(passwordEncoded);
     }
 
     private void addDefaultRoleToUser(Set<UserRole> userRoleSet){
-        UserRole defaultRole = userRoleRepository.findUserRoleByName("USER_ROLE").get();
+        UserRole defaultRole = userRoleRepository.findUserRoleByName("ROLE_USER").get();
         userRoleSet.add(defaultRole);
     }
 
