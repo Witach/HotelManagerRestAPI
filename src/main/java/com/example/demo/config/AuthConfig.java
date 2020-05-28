@@ -37,14 +37,16 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
+        http.csrf().disable();
         http
-                .cors()
-                .and()
-                .csrf().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS,"/auth").permitAll()
                 .antMatchers("/auth").authenticated()
+                .antMatchers(HttpMethod.OPTIONS,"/auth").permitAll()
+                .antMatchers("/user","/user/**").permitAll()
                 .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().fullyAuthenticated()
                 .and()
                 .httpBasic();
     }

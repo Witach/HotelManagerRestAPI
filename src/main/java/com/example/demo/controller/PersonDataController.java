@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Contact;
 import com.example.demo.entity.Person;
 import com.example.demo.model.ContactModel;
+import com.example.demo.model.PersonDTO;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.service.ContactService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 import static com.example.demo.config.Messages.*;
 
 @Slf4j
+@CrossOrigin
 @RestController
 @RequestMapping("/people")
 public class PersonDataController {
@@ -56,9 +58,13 @@ public class PersonDataController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Person> updatePerson(@RequestBody Person person, @PathVariable long id) {
-        if (!personRepository.existsById(id))
-            throw new IllegalArgumentException("Person with this id doesn't exits");
+    public ResponseEntity<Person> updatePerson(@RequestBody PersonDTO personDTO, @PathVariable long id) {
+        Person person = personRepository.findById(id)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Person with this id doesn't exits")
+                );
+        person.setLastName(personDTO.getLastName());
+        person.setFirstName(personDTO.getFirstName());
         var newPerson = personRepository.save(person);
         return ResponseEntity.ok(newPerson);
     }

@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Bill;
 import com.example.demo.entity.Contact;
+import com.example.demo.model.ContactDTO;
 import com.example.demo.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +15,7 @@ import java.net.URI;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/contacts")
 public class ContactController {
@@ -46,10 +47,11 @@ public class ContactController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateContact(@RequestBody Contact contact, @PathVariable long id){
-        if(!contactRepository.existsById(id))
-            throw new IllegalArgumentException("This bill doesn't exits");
-        var newContact = contactRepository.save(contact);
+    public ResponseEntity<?> updateContact(@RequestBody ContactDTO contact, @PathVariable long id){
+        Contact contactFormDb =  contactRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cotnact with this id doesn't exist"));
+        contactFormDb.setPhoneNumber(contact.getPhoneNumber());
+        var newContact = contactRepository.save(contactFormDb);
         return ResponseEntity.ok(newContact);
     }
 

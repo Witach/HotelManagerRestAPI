@@ -25,6 +25,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @Slf4j
 @Controller
+@CrossOrigin( origins = "*")
 public class AuthController {
 
     UserService userService;
@@ -35,12 +36,11 @@ public class AuthController {
     public AuthController(UserService userService, ContactRepository contactRepository, PersonRepository personRepository) {
         this.userService = userService;
         this.contactRepository = contactRepository;
-        this.personRepository =personRepository;
+        this.personRepository = personRepository;
     }
 
     @Transactional
     @PostMapping("/register")
-    @CrossOrigin
     public ResponseEntity<String> register(@RequestBody @Valid UserModel user) {
         log.info("Received request POST [/register]");
         try {
@@ -56,7 +56,7 @@ public class AuthController {
                 .build();
     }
 
-    @CrossOrigin
+
     @PostMapping("/auth")
     public ResponseEntity<User> authenticate() {
         return ResponseEntity.ok(null);
