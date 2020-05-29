@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hotel
+    username: postgres
+    password: retsad123
+    initialization-mode: always
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  security:
+    user:
+      name: admin
+      password: admin
+server:
+  port: 8001
