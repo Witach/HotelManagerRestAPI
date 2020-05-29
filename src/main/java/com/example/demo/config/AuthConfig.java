@@ -39,8 +39,10 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
         http.csrf().disable();
+        http.headers().frameOptions().disable();
         http
                 .authorizeRequests()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS,"/auth").permitAll()
                 .antMatchers("/auth").authenticated()
                 .antMatchers(HttpMethod.OPTIONS,"/auth").permitAll()
