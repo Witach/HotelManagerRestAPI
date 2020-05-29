@@ -1,10 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Bill;
 import com.example.demo.entity.Contact;
 import com.example.demo.entity.Person;
 import com.example.demo.model.ContactModel;
 import com.example.demo.model.PersonDTO;
+import com.example.demo.repository.BillRepository;
 import com.example.demo.repository.PersonRepository;
+import com.example.demo.service.BillService;
 import com.example.demo.service.ContactService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
+import java.util.Set;
 
 import static com.example.demo.config.Messages.*;
 
@@ -42,6 +48,8 @@ public class PersonDataController {
 //    }
     @Autowired
     PersonRepository personRepository;
+    @Autowired
+    BillRepository billRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Person> getPerson(@PathVariable long id) {
@@ -73,5 +81,12 @@ public class PersonDataController {
     public HttpStatus deletePerson(@PathVariable long id) {
         personRepository.deleteById(id);
         return HttpStatus.NO_CONTENT;
+    }
+
+    @GetMapping("/{id}/bills")
+    public ResponseEntity<List<Bill>> getBillsOfPerson(@PathVariable long id){
+        List<Bill> bills = billRepository.findAllByTenantId(id);
+       return ResponseEntity.ok(bills);
+
     }
 }

@@ -34,7 +34,7 @@ public class BillService {
     public Bill createBillFromReservation(Reservation reservation, String name) throws NoSuchElementException{
         Optional<Reservation> reservationOptional = reservationRepository.findById(reservation.getId());
         Reservation reservationFromDB = reservationOptional.orElseThrow();
-        Set<Room> roomSet = reservation.getRoomSet();
+        Room room = reservation.getRoom();
         SecurityContext securityContext = SecurityContextHolder.getContext();
         AppUser appUser = userRepository.findUserByEmail(name).orElseThrow();
         Person person = appUser.getPerson();
@@ -43,12 +43,7 @@ public class BillService {
         LocalDate toDate = reservationFromDB.getToDate();
         long days = ChronoUnit.DAYS.between(fromDate,toDate);
 
-        double price = roomSet.stream()
-                .reduce(
-                        0.,
-                        (sum,room)-> sum + room.getPrice() * days,
-                        Double::sum
-                );
+        double price = room.getPrice() * days;
 
         Bill bill = Bill.builder()
                 .price(price)

@@ -33,10 +33,6 @@ public class AppUser {
     String password;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "administrator")
-    Set<Bill> administratedBill;
-
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
@@ -51,16 +47,7 @@ public class AppUser {
     Person person;
 
     public AppUser() {
-        administratedBill = new HashSet<>();
         role = new HashSet<>();
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 
 }

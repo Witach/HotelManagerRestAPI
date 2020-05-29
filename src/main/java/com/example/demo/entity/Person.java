@@ -39,7 +39,7 @@ public class Person {
 
     @JsonBackReference
     @OneToMany(mappedBy = "tenant")
-    Set<Bill> bill;
+    Set<Bill> bills;
 
     @JsonBackReference
     @OneToOne(mappedBy = "person")
@@ -61,7 +61,7 @@ public class Person {
 
     public Person(){
         this.contactSet = new HashSet<>();
-        this.bill = new HashSet<>();
+        this.bills = new HashSet<>();
     }
 
     @Override

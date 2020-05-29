@@ -22,7 +22,6 @@ public class Bill {
     @Min(0)
     Double price;
 
-    @JsonBackReference
     @OneToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "reservation_id")
     @NotNull
@@ -33,12 +32,6 @@ public class Bill {
     @JoinColumn(name = "tenant_id")
     @NotNull
     Person tenant;
-
-    @JsonManagedReference
-    @ManyToOne
-    @JoinColumn(name = "administrator_id")
-    @NotNull
-    AppUser administrator;
 
     public Bill() {
     }
@@ -59,10 +52,6 @@ public class Bill {
 
     public Person getTenant() {
         return tenant;
-    }
-
-    public AppUser getAdministrator() {
-        return administrator;
     }
 
     public static Builder builder(){
@@ -86,11 +75,6 @@ public class Bill {
 
         public Builder tenant(Person tenant) {
             bill.setTenant(tenant);
-            return this;
-        }
-
-        public Builder administrator(AppUser administrator) {
-            bill.setAdministrator(administrator);
             return this;
         }
 

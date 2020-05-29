@@ -74,13 +74,11 @@ class DemoApplicationTests {
         Room room_b = new Room();
         room_b.setPrice(50.);
         room_b.setId(2L);
-        reservation.setRoomSet(Set.of(room_a, room_b));
         Contact contact = new Contact();
         contact.setPerson(person);
         contact.setPhoneNumber("792343278");
         person.getContactSet().add(contact);
         Bill bill = new Bill();
-        bill.setAdministrator(appUser);
         bill.setTenant(person);
         this.reservation = reservation;
         this.person = person;

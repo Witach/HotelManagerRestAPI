@@ -14,23 +14,19 @@ import java.util.stream.Collectors;
 @Builder
 public class ReservationDTO {
     Long id;
-    List<String> roomSet;
+    String room;
     Bill bill;
     LocalDate fromDate;
     LocalDate toDate;
 
     public static ReservationDTO makeFromEntity(Reservation reservation){
-        List<String> idsList = reservation.getRoomSet().stream()
-                .mapToLong(Room::getId)
-                .mapToObj(Long::toString)
-                .collect(Collectors.toList());
 
         return ReservationDTO.builder()
                 .bill(reservation.getBill())
                 .fromDate(reservation.getFromDate())
                 .toDate(reservation.getToDate())
                 .id(reservation.getId())
-                .roomSet(idsList)
+                .room(reservation.getRoom().getId().toString())
                 .build();
     }
 }

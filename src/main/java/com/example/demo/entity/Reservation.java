@@ -30,13 +30,9 @@ public class Reservation {
     @Column(name = "reservation_id")
     Long id;
 
-    @ManyToMany
+    @ManyToOne
     @NotNull
-    @JoinTable(
-            joinColumns = {@JoinColumn(name = "reservation_id", referencedColumnName = "reservation_id")},
-            inverseJoinColumns = {@JoinColumn(name = "room_id", referencedColumnName = "room_id")}
-    )
-    Set<Room> roomSet;
+    Room room;
 
     @OneToOne(mappedBy = "reservation")
     @JoinColumn(name = "bill_id")

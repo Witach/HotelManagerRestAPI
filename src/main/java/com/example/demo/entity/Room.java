@@ -54,7 +54,7 @@ public class Room {
     @NotNull
     Double price;
 
-    @ManyToMany(mappedBy = "roomSet")
+    @OneToMany(mappedBy = "room")
     @JsonIgnore
     Set<Reservation> reservationSet = new HashSet<>();
 
