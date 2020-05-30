@@ -39,5 +39,7 @@ public class Tag {
         return name;
     }
 
-
+    public Tag(String name){
+        this.name = name;
+    }
 }

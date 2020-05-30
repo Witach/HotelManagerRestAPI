@@ -16,7 +16,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "room_type")
 public class RoomType {
@@ -35,6 +34,13 @@ public class RoomType {
     @JsonIgnore
     @ManyToMany(mappedBy = "roomTypeSet")
     Set<Room> roomSet;
+
+    public RoomType() {
+    }
+
+    public RoomType(String name){
+        this.name = name;
+    }
 
     @Override
     public String toString() {
