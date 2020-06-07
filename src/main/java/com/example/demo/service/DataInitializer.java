@@ -116,7 +116,7 @@ public class DataInitializer implements CommandLineRunner {
                     var type = typesFromDb.get(random.nextInt(typesFromDb.size()));
                     var tag = tagsFromDb.get(random.nextInt(tags.size()));
                     var area = areas.get(random.nextInt(areas.size()));
-                    double price = random.nextInt(200);
+                    double price = random.nextInt(200) + 1;
                     var amount = random.nextInt(4) + 1;
                     var roomNumber = Integer.toString(random.nextInt(300));
                     var quote = faker.witcher().quote();
