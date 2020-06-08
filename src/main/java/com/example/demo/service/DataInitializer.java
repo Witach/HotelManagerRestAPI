@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -24,119 +25,137 @@ import java.util.stream.Stream;
 @Profile("dev")
 public class DataInitializer implements CommandLineRunner {
 
-    private ContactRepository contactRepository;
-    private UserRepository userRepository;
-    private RoomRepository roomRepository;
-    private ReservationRepository reservationRepository;
-    private BillRepository billRepository;
-    private PersonRepository personRepository;
-    private UserRoleRepository userRoleRepository;
-    private TagRepository tagRepository;
-    private RoomTypeRepository roomTypeRepository;
+	private ContactRepository contactRepository;
+	private UserRepository userRepository;
+	private RoomRepository roomRepository;
+	private ReservationRepository reservationRepository;
+	private BillRepository billRepository;
+	private PersonRepository personRepository;
+	private UserRoleRepository userRoleRepository;
+	private TagRepository tagRepository;
+	private RoomTypeRepository roomTypeRepository;
 
-    @Autowired
-    public DataInitializer(ContactRepository contactRepository, UserRepository userRepository, RoomRepository roomRepository, ReservationRepository reservationRepository, BillRepository billRepository, PersonRepository personRepository, UserRoleRepository userRoleRepository, TagRepository tagRepository, RoomTypeRepository roomTypeRepository) {
-        this.contactRepository = contactRepository;
-        this.userRepository = userRepository;
-        this.roomRepository = roomRepository;
-        this.reservationRepository = reservationRepository;
-        this.billRepository = billRepository;
-        this.personRepository = personRepository;
-        this.userRoleRepository = userRoleRepository;
-        this.tagRepository = tagRepository;
-        this.roomTypeRepository = roomTypeRepository;
-    }
+	@Autowired
+	public DataInitializer(ContactRepository contactRepository, UserRepository userRepository, RoomRepository roomRepository, ReservationRepository reservationRepository, BillRepository billRepository, PersonRepository personRepository, UserRoleRepository userRoleRepository, TagRepository tagRepository, RoomTypeRepository roomTypeRepository) {
+		this.contactRepository = contactRepository;
+		this.userRepository = userRepository;
+		this.roomRepository = roomRepository;
+		this.reservationRepository = reservationRepository;
+		this.billRepository = billRepository;
+		this.personRepository = personRepository;
+		this.userRoleRepository = userRoleRepository;
+		this.tagRepository = tagRepository;
+		this.roomTypeRepository = roomTypeRepository;
+	}
 
-    @Override
-    public void run(String... args) throws Exception {
-        log.info("Data initialization started");
-        Faker faker = new Faker();
-        Random random = new Random();
-        var userRole = new UserRole();
-        userRole.setName("ROLE_USER");
-        var userRole2 = new UserRole();
-        userRole2.setName("ROLE_ADMIN");
-        userRoleRepository.saveAll(List.of(userRole, userRole2));
-        List<AppUser> appUsers = new LinkedList<>();
-        IntStream.range(0, 100).forEach(value -> {
-            var witcher = faker.witcher()
-                    .character()
-                    .replaceAll("\\s+", "");
+	@Override
+	public void run(String... args) throws Exception {
+		log.info("Data initialization started");
+		Faker faker = new Faker();
+		Random random = new Random();
+		var userRole = new UserRole();
+		userRole.setName("ROLE_USER");
+		var userRole2 = new UserRole();
+		userRole2.setName("ROLE_ADMIN");
+		userRoleRepository.saveAll(List.of(userRole, userRole2));
 
-            if (witcher.length() > 30)
-                witcher = witcher.substring(0, 30);
+		var types = Stream.of("Apartament", "Kawalerka", "Bieda Edition", "Duży", "Luksus", "Ekonomiczny")
+				.map(RoomType::new)
+				.collect(Collectors.toList());
 
-            var contact = new Contact("792343278");
+		final var typesFromDb = roomTypeRepository.saveAll(types);
 
-            var person = Person.builder()
-                    .lastName(witcher)
-                    .firstName(witcher)
-                    .contactSet(Set.of(contact))
-                    .build();
+		var tags = IntStream.range(0, 100)
+				.mapToObj(value -> faker.witcher().monster())
+				.distinct()
+				.map(val -> val.length() > 20 ? val.substring(0, 19) : val)
+				.map(Tag::new)
+				.collect(Collectors.toList());
 
-            contact.setPerson(person);
+		final var tagsFromDb = tagRepository.saveAll(tags);
 
-            var appUser = AppUser.builder()
-                    .role(Set.of(userRole))
-                    .password("{noop}adminadmin")
-                    .email(witcher + "@wp.pl")
-                    .person(person)
-                    .build();
+		var areas = List.of(20, 30, 40, 50);
 
-            person.setAppUser(appUser);
+		List<AppUser> appUsers = new LinkedList<>();
+		IntStream.range(0, 100).forEach(value -> {
+			var witcher = faker.witcher()
+					.character()
+					.replaceAll("\\s+", "");
 
-            var usersCount = appUsers.stream()
-                    .filter(val -> val.getEmail().equals(appUser.getEmail()))
-                    .count();
+			if (witcher.length() > 30)
+				witcher = witcher.substring(0, 30);
 
-            if (usersCount == 0)
-                appUsers.add(appUser);
-        });
-        userRepository.saveAll(appUsers);
+			var contact = new Contact("792343278");
 
-        var types = Stream.of("Apartament", "Kawalerka", "Bieda Edition", "Duży", "Luksus", "Ekonomiczny")
-                .map(RoomType::new)
-                .collect(Collectors.toList());
+			var person = Person.builder()
+					.lastName(witcher)
+					.firstName(witcher)
+					.contactSet(Set.of(contact))
+					.build();
 
-        final var typesFromDb = roomTypeRepository.saveAll(types);
+			contact.setPerson(person);
 
-        var tags = IntStream.range(0, 100)
-                .mapToObj(value -> faker.witcher().monster())
-                .distinct()
-                .map(val -> val.length() > 20 ? val.substring(0, 19) : val)
-                .map(Tag::new)
-                .collect(Collectors.toList());
+			var appUser = AppUser.builder()
+					.role(Set.of(userRole))
+					.password("{noop}adminadmin")
+					.email(witcher + "@wp.pl")
+					.person(person)
+					.build();
 
-        final var tagsFromDb = tagRepository.saveAll(tags);
+			person.setAppUser(appUser);
 
-        var areas = List.of(20, 30, 40, 50);
+			var usersCount = appUsers.stream()
+					.filter(val -> val.getEmail().equals(appUser.getEmail()))
+					.count();
 
-        var rooms = IntStream.range(0, 20)
-                .mapToObj(val -> {
-                    var type = typesFromDb.get(random.nextInt(typesFromDb.size()));
-                    var tag = tagsFromDb.get(random.nextInt(tags.size()));
-                    var area = areas.get(random.nextInt(areas.size()));
-                    double price = random.nextInt(200) + 1;
-                    var amount = random.nextInt(4) + 1;
-                    var roomNumber = Integer.toString(random.nextInt(300));
-                    var quote = faker.witcher().quote();
-                    quote = quote.length() >= 120 ? quote.substring(0, 120) : quote;
-                    quote = quote.length() <= 24 ? quote + quote : quote;
+			if (usersCount == 0)
+				appUsers.add(appUser);
+		});
+		userRepository.saveAll(appUsers);
 
-                    return Room.builder()
-                            .roomTypeSet(Set.of(type))
-                            .tagSet(Set.of(tag))
-                            .area(area)
-                            .description(quote)
-                            .price(price)
-                            .personAmount(amount)
-                            .roomNumber(roomNumber)
-                            .build();
 
-                })
-                .collect(Collectors.toList());
+		personRepository.findAll().forEach(person -> IntStream.range(0, 3).forEach(x -> {
+			var type = typesFromDb.get(random.nextInt(typesFromDb.size()));
+			var tag = tagsFromDb.get(random.nextInt(tags.size()));
+			var area = areas.get(random.nextInt(areas.size()));
+			double price = random.nextInt(200) + 1;
+			var amount = random.nextInt(4) + 1;
+			var roomNumber = Integer.toString(random.nextInt(300));
+			var quote = faker.witcher().quote();
+			quote = quote.length() >= 120 ? quote.substring(0, 120) : quote;
+			quote = quote.length() <= 24 ? quote + quote : quote;
 
-        roomRepository.saveAll(rooms);
-    }
+			Room room = Room.builder()
+					.roomTypeSet(Set.of(type))
+					.tagSet(Set.of(tag))
+					.area(area)
+					.description(quote)
+					.price(price)
+					.personAmount(amount)
+					.roomNumber(roomNumber)
+					.build();
+			roomRepository.save(room);
+
+			var reservation = Reservation.builder()
+					.room(room)
+					.bill(null)
+					.fromDate(LocalDate.now().plusDays(random.nextInt(14)))
+					.toDate(LocalDate.now().plusDays(random.nextInt(14) + 14))
+					.build();
+			reservationRepository.save(reservation);
+
+			var bill = Bill.builder()
+					.price(random.nextDouble() * 200)
+					.tenant(person)
+					.reservation(reservation)
+					.build();
+			billRepository.save(bill);
+
+			reservation.setBill(bill);
+			reservationRepository.save(reservation);
+		}));
+
+
+	}
 
 }
