@@ -1,27 +1,24 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.AppUser;
-import com.example.demo.entity.Contact;
-import com.example.demo.entity.Person;
+import com.example.demo.exceptions.ApiError;
 import com.example.demo.exceptions.UserAlreadyExistsException;
 import com.example.demo.model.UserModel;
 import com.example.demo.repository.ContactRepository;
 import com.example.demo.repository.PersonRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @Controller
@@ -30,13 +27,15 @@ public class AuthController {
 
     UserService userService;
     ContactRepository contactRepository;
+    UserRepository userRepository;
     PersonRepository personRepository;
 
     @Autowired
-    public AuthController(UserService userService, ContactRepository contactRepository, PersonRepository personRepository) {
+    public AuthController(UserService userService, ContactRepository contactRepository, PersonRepository personRepository,  UserRepository userRepository) {
         this.userService = userService;
         this.contactRepository = contactRepository;
         this.personRepository = personRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -58,8 +57,16 @@ public class AuthController {
 
 
     @PostMapping("/auth")
-    public ResponseEntity<User> authenticate() {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<AppUser> authenticate(Principal principal) {
+        String userName = principal.getName();
+        AppUser user = userRepository.findUserByEmail(userName)
+                .orElseThrow(IllegalArgumentException::new);
+        return ResponseEntity.ok(user);
     }
 
+    @ExceptionHandler({IllegalArgumentException.class})
+    @ResponseStatus(UNAUTHORIZED)
+    public ResponseEntity<?> handleNumberFormatException(NumberFormatException e){
+        return null;
+    }
 }
