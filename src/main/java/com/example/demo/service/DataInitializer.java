@@ -54,11 +54,8 @@ public class DataInitializer implements CommandLineRunner {
 		log.info("Data initialization started");
 		Faker faker = new Faker();
 		Random random = new Random();
-		var userRole = new UserRole();
-		userRole.setName("ROLE_USER");
-		var userRole2 = new UserRole();
-		userRole2.setName("ROLE_ADMIN");
-		userRoleRepository.saveAll(List.of(userRole, userRole2));
+        var userRole = userRoleRepository.findUserRoleByName("USER").get();
+        var userRole2 = userRoleRepository.findUserRoleByName("ADMIN").get();
 
 		var types = Stream.of("Apartament", "Kawalerka", "Bieda Edition", "Duży", "Luksus", "Ekonomiczny")
 				.map(RoomType::new)

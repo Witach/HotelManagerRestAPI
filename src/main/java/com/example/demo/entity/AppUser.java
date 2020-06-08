@@ -32,12 +32,12 @@ public class AppUser {
     @NotNull
     String password;
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_role_id", referencedColumnName = "user_role_id")}
     )
+
     @Column(name = "user_role")
     @NotNull
     Set<UserRole> role = new HashSet<>();

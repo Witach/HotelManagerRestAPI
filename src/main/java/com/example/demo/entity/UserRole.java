@@ -1,5 +1,8 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +30,7 @@ public class UserRole {
     String description;
 
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "role", fetch = FetchType.EAGER)
     Set<AppUser> appUser;
 
