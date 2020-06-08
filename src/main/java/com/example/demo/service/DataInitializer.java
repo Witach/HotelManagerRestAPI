@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -78,18 +79,25 @@ public class DataInitializer implements CommandLineRunner {
 
 		List<AppUser> appUsers = new LinkedList<>();
 		IntStream.range(0, 100).forEach(value -> {
-			var witcher = faker.witcher()
+			var witcherName = faker.witcher()
 					.character()
 					.replaceAll("\\s+", "");
 
-			if (witcher.length() > 30)
-				witcher = witcher.substring(0, 30);
+			if (witcherName.length() > 30)
+				witcherName = witcherName.substring(0, 30);
+
+			var witcherSurname = faker.witcher()
+					.character()
+					.replaceAll("\\s+", "");
+
+			if (witcherSurname.length() > 30)
+				witcherSurname = witcherSurname.substring(0, 30);
 
 			var contact = new Contact("792343278");
 
 			var person = Person.builder()
-					.lastName(witcher)
-					.firstName(witcher)
+					.lastName(witcherName)
+					.firstName(witcherSurname)
 					.contactSet(Set.of(contact))
 					.build();
 
@@ -98,7 +106,7 @@ public class DataInitializer implements CommandLineRunner {
 			var appUser = AppUser.builder()
 					.role(Set.of(userRole))
 					.password("{noop}adminadmin")
-					.email(witcher + "@wp.pl")
+					.email(witcherName + "@wp.pl")
 					.person(person)
 					.build();
 
@@ -122,7 +130,7 @@ public class DataInitializer implements CommandLineRunner {
 			var amount = random.nextInt(4) + 1;
 			var roomNumber = Integer.toString(random.nextInt(300));
 			var quote = faker.witcher().quote();
-			quote = quote.length() >= 120 ? quote.substring(0, 120) : quote;
+			quote = quote.length() >= 200 ? quote.substring(0, 200) : quote;
 			quote = quote.length() <= 24 ? quote + quote : quote;
 
 			Room room = Room.builder()
@@ -145,7 +153,7 @@ public class DataInitializer implements CommandLineRunner {
 			reservationRepository.save(reservation);
 
 			var bill = Bill.builder()
-					.price(random.nextDouble() * 200)
+					.price(price * ChronoUnit.DAYS.between(reservation.getFromDate(), reservation.getToDate()))
 					.tenant(person)
 					.reservation(reservation)
 					.build();
