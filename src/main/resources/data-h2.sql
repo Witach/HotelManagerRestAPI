@@ -11,3 +11,6 @@ INSERT INTO public.app_user(
 INSERT INTO public .APP_USER_ROLE(USER_ID , USER_ROLE_ID) VALUES
 (1,2),
 (1,1);
+
+-- INSERT INTO public.bill(23, 323, 124, null);
+

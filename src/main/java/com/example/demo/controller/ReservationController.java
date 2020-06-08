@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.Messages;
+import com.example.demo.entity.Bill;
 import com.example.demo.entity.Reservation;
+import com.example.demo.repository.BillRepository;
 import com.example.demo.repository.ReservationRepository;
 import com.example.demo.service.ReservationService;
 import com.sun.mail.iap.Response;
@@ -16,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,11 +28,13 @@ public class ReservationController {
 
     private ReservationService reservationService;
     private ReservationRepository reservationRepository;
+    private BillRepository billRepository;
 
     @Autowired
-    public ReservationController(ReservationService reservationService, ReservationRepository reservationRepository) {
+    public ReservationController(ReservationService reservationService, ReservationRepository reservationRepository, BillRepository billRepository) {
         this.reservationService = reservationService;
         this.reservationRepository = reservationRepository;
+        this.billRepository = billRepository;
     }
 
     @Transactional
@@ -43,6 +48,12 @@ public class ReservationController {
     @GetMapping
     public ResponseEntity<Page<Reservation>> getReservations(Pageable pageable){
         return ResponseEntity.ok(reservationRepository.findAll(pageable));
+    }
+
+    @CrossOrigin
+    @GetMapping("/{id}/bills")
+    public ResponseEntity<List<Bill>> getPersonBills(@PathVariable long id){
+        return ResponseEntity.ok(billRepository.findAllByTenantId(id));
     }
 
     @GetMapping("/{id}")
