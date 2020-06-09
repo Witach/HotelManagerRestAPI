@@ -149,10 +149,14 @@ public class DataInitializer implements CommandLineRunner {
 					.build();
 			reservationRepository.save(reservation);
 
+			long number = (long)(random.nextGaussian()*7) + 15;
+			if(number < 0 || number > 32) number = random.nextInt(32);
 			var bill = Bill.builder()
 					.price(price * ChronoUnit.DAYS.between(reservation.getFromDate(), reservation.getToDate()))
 					.tenant(person)
 					.reservation(reservation)
+//					.date(LocalDate.now().minusDays(random.nextInt(30)))
+					.date(LocalDate.now().minusDays(number))
 					.build();
 			billRepository.save(bill);
 

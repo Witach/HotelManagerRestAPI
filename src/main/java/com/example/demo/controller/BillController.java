@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Bill;
+import com.example.demo.entity.Reservation;
 import com.example.demo.repository.BillRepository;
+import com.sun.mail.iap.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -35,6 +40,12 @@ public class BillController {
                         IllegalArgumentException::new
                 );
         return ResponseEntity.ok(bill);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<List<List<Object>>> getBillStatisticsFromLastMonth(){
+        var stats = billRepository.getStatistics(LocalDate.now().minusMonths(1));
+        return ResponseEntity.ok(stats);
     }
 
     @PostMapping
