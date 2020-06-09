@@ -67,7 +67,7 @@ public class UserService {
     }
 
     private void addDefaultRoleToUser(Set<UserRole> userRoleSet){
-        UserRole defaultRole = userRoleRepository.findUserRoleByName("ROLE_USER").get();
+        UserRole defaultRole = userRoleRepository.findUserRoleByName("USER").get();
         userRoleSet.add(defaultRole);
     }
 
