@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -52,7 +49,7 @@ public class DataInitializer implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		log.info("Data initialization started");
-		Faker faker = new Faker();
+		Faker faker = new Faker(new Locale("pl","PL"));
 		Random random = new Random();
         var userRole = userRoleRepository.findUserRoleByName("USER").get();
         var userRole2 = userRoleRepository.findUserRoleByName("ADMIN").get();
@@ -64,7 +61,7 @@ public class DataInitializer implements CommandLineRunner {
 		final var typesFromDb = roomTypeRepository.saveAll(types);
 
 		var tags = IntStream.range(0, 100)
-				.mapToObj(value -> faker.witcher().monster())
+				.mapToObj(value -> faker.pokemon().name())
 				.distinct()
 				.map(val -> val.length() > 20 ? val.substring(0, 19) : val)
 				.map(Tag::new)
@@ -76,14 +73,14 @@ public class DataInitializer implements CommandLineRunner {
 
 		List<AppUser> appUsers = new LinkedList<>();
 		IntStream.range(0, 100).forEach(value -> {
-			var witcherName = faker.witcher()
+			var witcherName = faker.lordOfTheRings()
 					.character()
 					.replaceAll("\\s+", "");
 
 			if (witcherName.length() > 30)
 				witcherName = witcherName.substring(0, 30);
 
-			var witcherSurname = faker.witcher()
+			var witcherSurname = faker.lordOfTheRings()
 					.character()
 					.replaceAll("\\s+", "");
 
@@ -126,7 +123,7 @@ public class DataInitializer implements CommandLineRunner {
 			double price = random.nextInt(200) + 1;
 			var amount = random.nextInt(4) + 1;
 			var roomNumber = Integer.toString(random.nextInt(300));
-			var quote = faker.witcher().quote();
+			var quote = faker.yoda().quote();
 			quote = quote.length() >= 200 ? quote.substring(0, 200) : quote;
 			quote = quote.length() <= 24 ? quote + quote : quote;
 
