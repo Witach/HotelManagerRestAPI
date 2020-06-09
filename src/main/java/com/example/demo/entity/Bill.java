@@ -22,7 +22,7 @@ public class Bill {
     @Min(0)
     Double price;
 
-    @OneToOne( fetch = FetchType.EAGER)
+    @OneToOne( fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "reservation_id")
     @NotNull
     Reservation reservation;

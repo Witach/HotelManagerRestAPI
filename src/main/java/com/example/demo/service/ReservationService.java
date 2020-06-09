@@ -2,29 +2,29 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Bill;
 import com.example.demo.entity.Reservation;
+import com.example.demo.model.ReservationCreateDTO;
+import com.example.demo.model.ReservationDTO;
 import com.example.demo.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+
 @Service
 public class ReservationService {
 
 
     BillService billService;
-    SecurityContext securityContext = SecurityContextHolder.getContext();
-    ReservationRepository reservationRepository;
-
     @Autowired
-    public ReservationService(BillService billService, ReservationRepository reservationRepository) {
+    public ReservationService(BillService billService) {
         this.billService = billService;
     }
 
-    public Reservation addReservation(Reservation reservation){
-         String userName = securityContext.getAuthentication().getName();
+    public Reservation addReservation(ReservationCreateDTO reservation, Principal principal){
+         String userName = principal.getName();
          Bill bill = billService.createBillFromReservation(reservation, userName);
-         reservation.setBill(bill);
-         return reservationRepository.save(reservation);
+         return bill.getReservation();
     }
 }

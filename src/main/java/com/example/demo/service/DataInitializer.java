@@ -143,21 +143,19 @@ public class DataInitializer implements CommandLineRunner {
 
 			var reservation = Reservation.builder()
 					.room(room)
-					.bill(null)
 					.fromDate(LocalDate.now().plusDays(random.nextInt(14)))
 					.toDate(LocalDate.now().plusDays(random.nextInt(14) + 14))
 					.build();
-			reservationRepository.save(reservation);
 
 			var bill = Bill.builder()
 					.price(price * ChronoUnit.DAYS.between(reservation.getFromDate(), reservation.getToDate()))
 					.tenant(person)
 					.reservation(reservation)
 					.build();
+			reservation.setBill(bill);
+
 			billRepository.save(bill);
 
-			reservation.setBill(bill);
-			reservationRepository.save(reservation);
 		}));
 
 

@@ -94,17 +94,17 @@ class DemoApplicationTests {
         roomRepository = mock(RoomRepository.class);
         gson = new Gson();
     }
-
-    @Test
-    void shouldCreateBillFromReservationInfo() {
-        when(reservationRepository.findById(anyLong())).thenReturn(Optional.of(reservation));
-        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(appUser));
-        when(billRepository.save(any(Bill.class))).thenReturn(null);
-
-        BillService billService = new BillService(billRepository, reservationRepository, userRepository);
-        Bill bill = billService.createBillFromReservation(reservation, "admin");
-        assertThat(bill.getTenant()).isEqualTo(person);
-    }
+//
+//    @Test
+//    void shouldCreateBillFromReservationInfo() {
+//        when(reservationRepository.findById(anyLong())).thenReturn(Optional.of(reservation));
+//        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(appUser));
+//        when(billRepository.save(any(Bill.class))).thenReturn(null);
+//
+//        BillService billService = new BillService(billRepository, reservationRepository, userRepository);
+//        Bill bill = billService.createBillFromReservation(reservation, "admin");
+//        assertThat(bill.getTenant()).isEqualTo(person);
+//    }
 
     @Test
     void shouldCreateContact(){

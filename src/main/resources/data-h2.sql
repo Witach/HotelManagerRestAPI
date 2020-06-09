@@ -12,5 +12,8 @@ INSERT INTO public .APP_USER_ROLE(USER_ID , USER_ROLE_ID) VALUES
 (1,2),
 (1,1);
 
+INSERT INTO public.person VALUES (1,'Admin', 'Admin');
+
+UPDATE public.app_user SET app_user.person_person_id = 1  where app_user.user_id = 1 ;
 -- INSERT INTO public.bill(23, 323, 124, null);
 

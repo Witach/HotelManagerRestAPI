@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.config.Messages;
 import com.example.demo.entity.Bill;
 import com.example.demo.entity.Reservation;
+import com.example.demo.model.ReservationCreateDTO;
+import com.example.demo.model.ReservationDTO;
 import com.example.demo.repository.BillRepository;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.ReservationRepository;
@@ -25,6 +27,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@CrossOrigin
 @RequestMapping("/reservation")
 public class ReservationController {
 
@@ -46,26 +49,25 @@ public class ReservationController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<Reservation> makeReservation(@RequestBody @Valid Reservation reservation){
+    public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationCreateDTO reservation, Principal principal) {
         log.info(Messages.makeMessageForController("POST [/reservation]"));
-        Reservation addedEntity = reservationService.addReservation(reservation);
+        Reservation addedEntity = reservationService.addReservation(reservation, principal);
         return ResponseEntity.ok(addedEntity);
     }
 
     @GetMapping
-    public ResponseEntity<Page<Reservation>> getReservations(Pageable pageable){
+    public ResponseEntity<Page<Reservation>> getReservations(Pageable pageable) {
         return ResponseEntity.ok(reservationRepository.findAll(pageable));
     }
 
     @CrossOrigin
     @GetMapping("/person/{id}/bills")
-    public ResponseEntity<List<Bill>> getPersonBills(@PathVariable long id){
+    public ResponseEntity<List<Bill>> getPersonBills(@PathVariable long id) {
         return ResponseEntity.ok(billRepository.findAllByTenantId(id));
     }
 
-    @CrossOrigin
     @GetMapping("/bills/{id}")
-    public ResponseEntity<Bill> getBillById(@PathVariable long id, Principal principal){
+    public ResponseEntity<Bill> getBillById(@PathVariable long id, Principal principal) {
         var person = userRepository.findUserByEmail(principal.getName())
                 .orElseThrow(IllegalArgumentException::new)
                 .getPerson();
@@ -78,7 +80,7 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getReservation(@PathVariable long id){
+    public ResponseEntity<Reservation> getReservation(@PathVariable long id) {
         var reservation = reservationRepository.findById(id)
                 .orElseThrow(
                         IllegalArgumentException::new
@@ -88,22 +90,22 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable long id, Reservation reservation){
-        if(!reservationRepository.existsById(id))
+    public ResponseEntity<Reservation> updateReservation(@PathVariable long id, Reservation reservation) {
+        if (!reservationRepository.existsById(id))
             throw new IllegalArgumentException("No reservation with this id");
         var newReservation = reservationRepository.save(reservation);
         return ResponseEntity.ok(newReservation);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus deleteReservation(@PathVariable long id){
+    public HttpStatus deleteReservation(@PathVariable long id) {
         reservationRepository.deleteById(id);
         return HttpStatus.NO_CONTENT;
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    void handleException(IllegalArgumentException ex){
+    void handleException(IllegalArgumentException ex) {
 
     }
 
