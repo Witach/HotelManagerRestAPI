@@ -14,7 +14,7 @@ import java.util.List;
 public interface BillRepository extends JpaRepository<Bill, Long> {
     List<Bill> findAllByTenantId(long id);
 
-    @Query("SELECT date, COUNT(date) FROM Bill WHERE date > :fromDate GROUP BY date")
+    @Query("SELECT date, COUNT(date), SUM(price) FROM Bill WHERE date > :fromDate GROUP BY date")
     List<List<Object>> getStatistics(LocalDate fromDate);
 
 }
