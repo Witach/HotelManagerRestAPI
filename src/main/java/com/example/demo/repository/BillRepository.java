@@ -13,7 +13,7 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findAllByTenantId(long id);
 
-    @Query("SELECT date, COUNT(date), SUM(price) FROM Bill WHERE date > :fromDate GROUP BY date")
+    @Query("SELECT date, COUNT(date), SUM(price) FROM Bill WHERE date > :fromDate GROUP BY date ORDER BY date ASC")
     List<List<Object>> getStatistics(LocalDate fromDate);
 
 }
