@@ -1,14 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Bill;
-import com.example.demo.entity.Reservation;
 import com.example.demo.repository.BillRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.sun.mail.iap.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,13 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.persistence.Tuple;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -56,23 +46,23 @@ public class BillController {
 
         ArrayList<Object> dates = new ArrayList<>();
         ArrayList<Object> numberOfBillsEachDay = new ArrayList<>();
-        ArrayList<Object> totalMoneySpentOnEachDay = new ArrayList<>();
+        ArrayList<Object> totalMoneySpentEachDay = new ArrayList<>();
         long totalNumberOfBills = 0;
-        double totalMoneySpend = 0;
+        double totalMoneySpent = 0;
         for (var record: stats) {
             dates.add(record.get(0));
             numberOfBillsEachDay.add(record.get(1));
-            totalMoneySpentOnEachDay.add(record.get(2));
+            totalMoneySpentEachDay.add(record.get(2));
             totalNumberOfBills += (long)record.get(1);
-            totalMoneySpend += (double)record.get(2);
+            totalMoneySpent += (double)record.get(2);
         }
 
         Map<String, Object> map = new HashMap<>();
         map.put("dates", dates);
         map.put("numberOfBillsEachDay", numberOfBillsEachDay);
-        map.put("totalMoneySpentOnEachDay", totalMoneySpentOnEachDay);
+        map.put("totalMoneySpentEachDay", totalMoneySpentEachDay);
         map.put("totalNumberOfBills", totalNumberOfBills);
-        map.put("totalMoneySpend", totalMoneySpend);
+        map.put("totalMoneySpent", totalMoneySpent);
 
         return ResponseEntity.ok(map);
     }
