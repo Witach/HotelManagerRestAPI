@@ -4,7 +4,7 @@ INSERT  INTO public.user_role(user_role_id,name,description) VALUES
 
 INSERT INTO public.app_user(
 	 email, password, person_person_id)
-	SELECT 'admin@wp.pl', '{noop}admin', null
+	SELECT 'admin@wp.pl', '{noop}adminadmin', null
 	WHERE NOT EXISTS (SELECT  * FROM public.app_user WHERE email='admin@wp.pl');
 
 

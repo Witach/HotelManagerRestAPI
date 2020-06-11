@@ -66,16 +66,17 @@ public class ReservationController {
         return ResponseEntity.ok(billRepository.findAllByTenantId(id));
     }
 
+    //TODO wczytywanie nie swoich danych można sprawdzać ifem jak tu lub napisać jakiś 'sprytny' Interceptor
+
     @GetMapping("/bills/{id}")
     public ResponseEntity<Bill> getBillById(@PathVariable long id, Principal principal) {
         var person = userRepository.findUserByEmail(principal.getName())
                 .orElseThrow(IllegalArgumentException::new)
                 .getPerson();
         var bill = billRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        //TODO null pointer exception????
-//        if(!person.getId().equals(bill.getTenant().getId())){
-//            throw new IllegalArgumentException();
-//        }
+        if(!person.getId().equals(bill.getTenant().getId())){
+            throw new IllegalArgumentException();
+        }
         return ResponseEntity.ok(bill);
     }
 

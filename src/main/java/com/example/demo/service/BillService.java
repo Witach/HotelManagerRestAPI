@@ -58,6 +58,7 @@ public class BillService {
                 .price(price)
                 .reservation(reservationPersisted)
                 .tenant(person)
+                .date(LocalDate.now())
                 .build();
 
         reservationPersisted.setBill(bill);

@@ -37,7 +37,6 @@ public class Bill {
     Person tenant;
 
     @Column(name = "date")
-    @NotNull
     @PastOrPresent
     LocalDate date;
 
