@@ -24,7 +24,4 @@ public class UserModel {
     String firstName;
     @NotNull
     String lastName;
-    @NotNull
-    @Size(min = 11, max = 11)
-    String pesel;
 }

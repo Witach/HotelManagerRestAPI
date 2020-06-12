@@ -8,5 +8,4 @@ import lombok.Setter;
 public class PersonDTO {
     String firstName;
     String lastName;
-    String pesel;
 }
