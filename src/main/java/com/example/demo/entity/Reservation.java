@@ -46,7 +46,7 @@ public class Reservation {
 
     @Column(name = "to_date")
     @NotNull
-    @Future
+    @FutureOrPresent
     LocalDate toDate;
 
 }

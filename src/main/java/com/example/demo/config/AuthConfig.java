@@ -34,7 +34,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/tag").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/bills/statistics").hasRole("ADMIN")
-                .antMatchers("/**").authenticated()
+//                .antMatchers("/**").authenticated()
                 .anyRequest().fullyAuthenticated()
                 .and()
                 .httpBasic();

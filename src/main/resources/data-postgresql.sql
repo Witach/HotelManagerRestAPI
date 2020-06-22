@@ -18,4 +18,4 @@ SELECT  1,1 WHERE NOT EXISTS(SELECT * FROM public.APP_USER_ROLE WHERE USER_ID = 
 INSERT INTO public.person(person_id, last_name, first_name)
 SELECT 1,'Admin', 'Admin' WHERE NOT EXISTS(SELECT * FROM  public.person WHERE person_id = 1);
 
-UPDATE public.app_user SET app_user.person_person_id = 1  where app_user.user_id = 1 ;
+-- UPDATE public.app_user SET person_id = 1  where user_id = 1 ;

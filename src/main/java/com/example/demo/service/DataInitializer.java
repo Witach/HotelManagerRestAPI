@@ -72,7 +72,7 @@ public class DataInitializer implements CommandLineRunner {
 		var areas = List.of(20, 30, 40, 50);
 
 		List<AppUser> appUsers = new LinkedList<>();
-		IntStream.range(0, 100).forEach(value -> {
+		IntStream.range(0, 70).forEach(value -> {
 			var witcherName = faker.lordOfTheRings()
 					.character()
 					.replaceAll("\\s+", "");
@@ -144,7 +144,7 @@ public class DataInitializer implements CommandLineRunner {
 					.toDate(LocalDate.now().plusDays(random.nextInt(14) + 14))
 					.build();
 
-			long number = (long)(random.nextGaussian() * 7) + 15;
+			long number = (long)(random.nextGaussian() * 8) + 15;
 			if(number < 0 || number > 32) number = random.nextInt(32);
 			var bill = Bill.builder()
 					.price(price * ChronoUnit.DAYS.between(reservation.getFromDate(), reservation.getToDate()))

@@ -9,7 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
-//Zmieniłem bo intelij pluł się o nazwe
+
+
 @Entity
 @Table(name = "app_user")
 @Getter

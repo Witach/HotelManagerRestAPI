@@ -11,7 +11,7 @@ public class LogInOutController {
 
     @RequestMapping("/secured")
     public ResponseEntity<String> secured(){
-        return ResponseEntity.ok("DUPA");
+        return ResponseEntity.ok("Oooops");
     }
 
     @RequestMapping("/fail")
